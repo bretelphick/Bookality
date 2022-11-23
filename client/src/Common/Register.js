@@ -10,8 +10,8 @@ function Register() {
 						<small className="text-muted">Come on in, the waters fine.</small>
 					</div>
 					<form>
-						<div class="form-group mt-3">
-							<label for="exampleInputEmail1">Email address</label>
+						<div className="form-group mt-3">
+							<label htmlFor="exampleInputEmail1">Email address</label>
 							<input
 								type="email"
 								class="form-control"
@@ -19,12 +19,12 @@ function Register() {
 								aria-describedby="emailHelp"
 								placeholder="Enter email"
 							/>
-							<small id="emailHelp" class="form-text text-muted">
+							<small id="emailHelp" className="form-text text-muted">
 								We'll never share your email with anyone else.
 							</small>
 						</div>
 						<div className="form-group mt-3">
-							<label for="exampleInputUsername1">Username</label>
+							<label hmtlFor="exampleInputUsername1">Username</label>
 							<input
 								type="text"
 								className="form-control"
@@ -33,7 +33,7 @@ function Register() {
 							/>
 						</div>
 						<div className="form-group mt-3">
-							<label for="exampleInputPassword1">Password</label>
+							<label htmlFor="exampleInputPassword1">Password</label>
 							<input
 								type="password"
 								className="form-control"

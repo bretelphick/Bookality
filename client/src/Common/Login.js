@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 
-function Login() {
+const Login = () => {
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+
+	const logInUser = async (e) => {
+		e.preventDefault();
+		console.log(username, password);
+		await fetch("http://localhost:5000/login", {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				username: username,
+				password: password,
+			}),
+		})
+			.then((data) => {
+				console.log(data.json());
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
 	return (
 		<div className="mt-5">
 			<div className="card mx-auto w-50">
@@ -11,24 +36,29 @@ function Login() {
 					</div>
 					<form>
 						<div className="form-group mt-3">
-							<label for="exampleInputUsername1">Username</label>
+							<label htmlFor="exampleInputUsername1">Username</label>
 							<input
 								type="text"
 								className="form-control"
 								id="exampleInputUsername1"
 								placeholder="Enter username"
+								onChange={(e) => setUsername(e.target.value)}
 							/>
 						</div>
 						<div className="form-group mt-3">
-							<label for="exampleInputPassword1">Password</label>
+							<label htmlFor="exampleInputPassword1">Password</label>
 							<input
 								type="password"
 								className="form-control"
 								id="exampleInputPassword1"
 								placeholder="Password"
+								onChange={(e) => setPassword(e.target.value)}
 							/>
 						</div>
-						<button type="submit" className="btn btn-success mt-3">
+						<button
+							type="submit"
+							className="btn btn-success mt-3"
+							onClick={logInUser}>
 							Submit
 						</button>
 					</form>
@@ -36,6 +66,6 @@ function Login() {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Login;
