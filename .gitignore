@@ -10,6 +10,7 @@ server/myenv/
 client/node_modules
 client/.pnp
 .pnp.js
+client/package-lock.json
 
 # testing
 client/coverage
