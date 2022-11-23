@@ -3,11 +3,14 @@ import bcrypt
 from app import app, db
 from flask import jsonify, request, session
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS, cross_origin
 from models import User
 from flask_session import Session
+from psycopg2.extras import Json
 
 bcrypt = Bcrypt(app)
 server_session = Session(app)
+cors = CORS(app, supports_credentials=True)
 
 # HOME PAGE ROUTE
 @app.route("/")
@@ -21,7 +24,7 @@ def get_current_user():
     user_id = session.get("user_id")
 
     if user_id is None:
-        return jsonify({"error", "unauthorized"}), 401
+        return jsonify({"error": "unauthorized"}), 401
 
     user = User.query.filter_by(id=user_id).first()
     return jsonify({"id": user.id, "email": user.email})
@@ -53,8 +56,9 @@ def register_user():
 
 @app.route("/login", methods=["POST"])
 def login_user():
-    username = request.json["username"]
-    password = request.json["password"]
+    params = request.get_json()
+    username = params["username"]
+    password = params["password"]
 
     user = User.query.filter_by(username=username).first()
 
@@ -67,3 +71,4 @@ def login_user():
     session["user_id"] = user.id
 
     return jsonify({"id": user.id, "email": user.email})
+    #return {"id": user.id, "email": user.email}
