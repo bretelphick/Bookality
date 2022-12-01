@@ -7,6 +7,7 @@ import Login from "./Common/Login";
 import Register from "./Common/Register";
 import Create from "./CreateReview/CreateReview";
 import Find from "./FindReview/FindReview";
+import Profile from "./Profile/Profile";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/create" element={<Create />} />
             <Route path="/find" element={<Find />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </div>
