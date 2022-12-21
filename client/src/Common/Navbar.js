@@ -16,6 +16,7 @@ const Navbar = (props) => {
         .then((data) => {
           if ("error" in data) {
             console.log("Unauthorized User");
+            setLoading(false);
             // rather than console log display alert on screen
           } else {
             setUser(data);
