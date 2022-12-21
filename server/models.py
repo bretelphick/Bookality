@@ -23,3 +23,18 @@ class User(db.Model):
 
 
 # BOOK REVIEW MODEL
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(30), nullable=False)
+    review = db.Column(db.String(240), nullable=False)
+    book = db.Column(db.String(50), nullable=False)
+    location = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, username, review, book, location):
+        self.username = username
+        self.review = review
+        self.book = book
+        self.location = location
+
+    def __repr__(self):
+        return "<User %r>" % self.username

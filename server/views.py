@@ -4,7 +4,7 @@ from app import app, db
 from flask import jsonify, request, session
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from models import User
+from models import User, Review
 from flask_session import Session
 from psycopg2.extras import Json
 
@@ -69,7 +69,36 @@ def login_user():
         return jsonify({"error": "unauthorized"}), 401
 
     session["user_id"] = user.id
-    #session.modified = True
+    # session.modified = True
 
     return jsonify({"id": user.id, "email": user.email})
-    #return {"id": user.id, "email": user.email}
+    # return {"id": user.id, "email": user.email}
+
+
+@app.route("/logout")
+def logout():
+    if "user_id" not in session:
+        return jsonify({"error": "not logged in"}), 409
+
+    value = session.get("user_id")
+    session.pop("user_id", None)
+    return jsonify({"logout": value})
+
+
+@app.route("/createReview")
+def createReview():
+    if "user_id" not in session:
+        return jsonify({"error": "not logged in"}), 409
+
+    id = session.get("user_id")
+    username = (User.query.filter_by(id=id).first()).username
+
+    book = request.json["book"]
+    review = request.json["review"]
+    location = request.json["location"]
+
+    new_review = Review(username=username, book=book, review=review, location=location)
+    db.session.add(new_review)
+    db.session.commit()
+
+    return jsonify({"id": new_review.id})
