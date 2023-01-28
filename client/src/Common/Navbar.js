@@ -1,43 +1,24 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import NavbarLoggedOut from "./NavbarLoggedOut";
 import NavbarLoggedIn from "./NavbarLoggedIn";
 
 const Navbar = (props) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
   let navbarButtons;
 
-  useEffect(() => {
-    (async () => {
-      await fetch("http://localhost:5000/@me", {
-        credentials: "include",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if ("error" in data) {
-            console.log("Unauthorized User");
-            setLoading(false);
-            // rather than console log display alert on screen
-          } else {
-            setUser(data);
-            console.log(data);
-            setLoading(false);
-          }
-        });
-    })();
-  }, []);
+  console.log(props.isLoggedIn);
 
-  if (loading == false && user != null) {
+  if (props.isLoggedIn == true) {
     navbarButtons = <NavbarLoggedIn></NavbarLoggedIn>;
-  } else if (loading == false && user == null) {
+  } else if (props.isLoggedIn == false) {
     navbarButtons = <NavbarLoggedOut></NavbarLoggedOut>;
   }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light px-3">
-      <a className="navbar-brand m" href="/">
+      <Link to="/" className="navbar-brand m">
         Bookality
-      </a>
+      </Link>
       <button
         className="navbar-toggler"
         type="button"
@@ -53,19 +34,19 @@ const Navbar = (props) => {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
-            <a className="nav-link" href="/create">
+            <Link to="/create" className="nav-link">
               Create Review
-            </a>
+            </Link>
           </li>
           <li className="nav-item active">
-            <a className="nav-link" href="/find">
+            <Link to="/find" className="nav-link">
               Find Reviews
-            </a>
+            </Link>
           </li>
           <li className="nav-item active">
-            <a className="nav-link" href="/about">
+            <Link to="/about" className="nav-link">
               About
-            </a>
+            </Link>
           </li>
         </ul>
         {navbarButtons}

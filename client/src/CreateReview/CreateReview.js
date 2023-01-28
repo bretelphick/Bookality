@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function CreateReview() {
+function CreateReview(props) {
   const [book, setBook] = useState("");
   const [review, setReview] = useState("");
   const [location, setLocation] = useState("");
@@ -30,57 +30,61 @@ function CreateReview() {
       });
   };
 
-  return (
-    <div className="mt-5">
-      <div className="card mx-auto w-50">
-        <div className="card-body">
-          <div className="text-center">
-            <h2>Create Review</h2>
-            <small className="text-muted">Create the backbone.</small>
+  if (props.isLoggedIn == true) {
+    return (
+      <div className="mt-5">
+        <div className="card mx-auto w-50">
+          <div className="card-body">
+            <div className="text-center">
+              <h2>Create Review</h2>
+              <small className="text-muted">Create the backbone.</small>
+            </div>
+            <form>
+              <div className="form-group mt-3">
+                <label htmlFor="exampleInputBook1">Book Title</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="exampleInputBook1"
+                  placeholder="Enter book title"
+                  onChange={(e) => setBook(e.target.value)}
+                />
+              </div>
+              <div className="form-group mt-3">
+                <label htmlFor="exampleInputReview1">Review</label>
+                <textarea
+                  class="form-control"
+                  id="exampleInputReview1"
+                  placeholder="Enter genius"
+                  rows="3"
+                  onChange={(e) => setReview(e.target.value)}
+                ></textarea>
+              </div>
+              <div className="form-group mt-3">
+                <label htmlFor="exampleInputLocation1">Location</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="exampleInputLocation1"
+                  placeholder="Enter location"
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn btn-success mt-3"
+                onClick={createBookReview}
+              >
+                Submit
+              </button>
+            </form>
           </div>
-          <form>
-            <div className="form-group mt-3">
-              <label htmlFor="exampleInputBook1">Book Title</label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleInputBook1"
-                placeholder="Enter book title"
-                onChange={(e) => setBook(e.target.value)}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label htmlFor="exampleInputReview1">Review</label>
-              <textarea
-                class="form-control"
-                id="exampleInputReview1"
-                placeholder="Enter genius"
-                rows="3"
-                onChange={(e) => setReview(e.target.value)}
-              ></textarea>
-            </div>
-            <div className="form-group mt-3">
-              <label htmlFor="exampleInputLocation1">Location</label>
-              <input
-                type="text"
-                className="form-control"
-                id="exampleInputLocation1"
-                placeholder="Enter location"
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn btn-success mt-3"
-              onClick={createBookReview}
-            >
-              Submit
-            </button>
-          </form>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else if (props.isLoggedIn == false) {
+    window.location.href = "/login";
+  }
 }
 
 export default CreateReview;

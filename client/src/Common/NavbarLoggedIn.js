@@ -1,6 +1,9 @@
 import React from "react";
 
+import { useNavigate, Link } from "react-router-dom";
+
 function NavbarLoggedIn() {
+  const navigate = useNavigate();
   const logOutUser = async (e) => {
     e.preventDefault();
     await fetch("http://localhost:5000/logout", {
@@ -8,17 +11,17 @@ function NavbarLoggedIn() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         window.location.href = "/";
+        //navigate("/");
       });
   };
 
   return (
     <ul className="navbar-nav ms-auto">
       <li className="nav-item px-2">
-        <a className="btn btn-outline-success" href="/" onClick={logOutUser}>
+        <button className="btn btn-success" onClick={logOutUser}>
           Logout
-        </a>
+        </button>
       </li>
     </ul>
   );

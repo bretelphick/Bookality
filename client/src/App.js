@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from "./Home/Home";
 import About from "./About/About";
 import Navbar from "./Common/Navbar";
@@ -10,23 +10,44 @@ import Find from "./FindReview/FindReview";
 import Profile from "./Profile/Profile";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      await fetch("http://localhost:5000/@me", {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if ("error" in data) {
+            console.log("Not logged in");
+            setLoggedIn(false);
+            //setLoading(false);
+            // rather than console log display alert on screen
+          } else {
+            console.log(data);
+            setLoggedIn(true);
+            //setLoading(false);
+          }
+        });
+    })();
+  }, []);
+
   return (
-    <Router>
-      <div className="app">
-        <Navbar />
-        <div className="page-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/create" element={<Create />} />
-            <Route path="/find" element={<Find />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </div>
+    <div className="app">
+      <Navbar isLoggedIn={loggedIn} />
+      <div className="page-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/create" element={<Create isLoggedIn={loggedIn} />} />
+          <Route path="/find" element={<Find />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
       </div>
-    </Router>
+    </div>
   );
 }
 
