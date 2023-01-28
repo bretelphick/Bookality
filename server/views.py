@@ -1,4 +1,4 @@
-import json
+from json import dumps
 import bcrypt
 from app import app, db
 from flask import jsonify, request, session
@@ -21,12 +21,17 @@ def members():
 @app.route("/@me")
 def get_current_user():
 
-    user_id = session.get("user_id")
+    # user_id = session.get("user_id")
 
-    if user_id is None:
-        return jsonify({"error": "unauthorized"}), 401
+    # if user_id is None:
+    # return jsonify({"error": "unauthorized"}), 401
 
-    user = User.query.filter_by(id=user_id).first()
+    id = session.get("user_id")
+
+    if "user_id" not in session:
+        return jsonify({"error": "not logged in"}), 401
+
+    user = User.query.filter_by(id=id).first()
     return jsonify({"id": user.id, "email": user.email})
 
 
@@ -63,10 +68,10 @@ def login_user():
     user = User.query.filter_by(username=username).first()
 
     if user is None:
-        return jsonify({"error": "unauthorized"}), 401
+        return jsonify({"error": "username does not exist"}), 400
 
     if not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"error": "unauthorized"}), 401
+        return jsonify({"error": "password is not correct"}), 400
 
     session["user_id"] = user.id
     # session.modified = True
@@ -78,20 +83,23 @@ def login_user():
 @app.route("/logout")
 def logout():
     if "user_id" not in session:
-        return jsonify({"error": "not logged in"}), 409
+        return jsonify({"error": "not logged in"}), 401
 
     value = session.get("user_id")
     session.pop("user_id", None)
     return jsonify({"logout": value})
 
 
-@app.route("/createReview")
+@app.route("/createReview", methods=["POST"])
 def createReview():
     if "user_id" not in session:
-        return jsonify({"error": "not logged in"}), 409
+        return jsonify({"error": "not logged in"}), 401
 
     id = session.get("user_id")
     username = (User.query.filter_by(id=id).first()).username
+
+    print(id)
+    print(username)
 
     book = request.json["book"]
     review = request.json["review"]
